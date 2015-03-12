@@ -1,0 +1,20 @@
+dependencies { 
+		compile (
+		 'jmagick:jmagick:6.6.9',
+		 "org.springframework:spring-core:$springVersion",
+		 "org.springframework:spring-web:$springVersion",
+		 'org.apache.commons:commons-lang3:3.1',
+		 'commons-lang:commons-lang:2.6',
+		 'commons-io:commons-io:2.4',
+		 'org.apache.velocity:velocity:1.7',
+		 'org.apache.velocity:velocity-tools:2.0',
+		 'net.sourceforge.htmlcleaner:htmlcleaner:2.2',
+		 'commons-codec:commons-codec:1.8',
+		 'log4j:log4j:1.2.17',
+		 'org.slf4j:slf4j-api:1.7.10'
+		 )
+		runtime 'javax.servlet:javax.servlet-api:3.1.0'
+}
+
+
+

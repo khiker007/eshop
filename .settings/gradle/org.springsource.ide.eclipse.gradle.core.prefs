@@ -1,0 +1,5 @@
+#org.springsource.ide.eclipse.gradle.core.preferences.GradleProjectPreferences
+#Wed Mar 11 17:29:27 CST 2015
+build.family.org.gradle.tooling.model.eclipse.HierarchicalEclipseProject=;eshop-cache;eshop-common;eshop-frameworks;eshop-manage;eshop-model;eshop-passport;eshop-service;eshop-web;
+org.springsource.ide.eclipse.gradle.linkedresources=
+org.springsource.ide.eclipse.gradle.rootprojectloc=

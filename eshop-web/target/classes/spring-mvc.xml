@@ -1,0 +1,217 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:mvc="http://www.springframework.org/schema/mvc" xmlns:p="http://www.springframework.org/schema/p"
+	xsi:schemaLocation="http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc-3.2.xsd
+	http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.2.xsd
+	http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.2.xsd">
+	<!-- ①：对web包中的所有类进行扫描，以完成Bean创建和自动依赖注入的功能 -->
+	<context:component-scan base-package="com.cloud.sns">
+		<context:include-filter type="annotation" expression="org.springframework.stereotype.Controller" />
+		<context:include-filter type="annotation" expression="org.springframework.web.bind.annotation.ControllerAdvice" />
+	</context:component-scan>
+	<mvc:annotation-driven content-negotiation-manager="contentNegotiationManager">
+		<mvc:message-converters register-defaults="true">
+			<!-- 将StringHttpMessageConverter的默认编码设为UTF-8 -->
+			<bean class="org.springframework.http.converter.StringHttpMessageConverter">
+				<constructor-arg value="UTF-8" />
+			</bean>
+			<!-- spring-android中的类 -->
+			<bean class="com.cloud.sns.framework.core.util.json.GsonHttpMessageConverter" />
+		</mvc:message-converters>
+	</mvc:annotation-driven>
+	<mvc:default-servlet-handler />
+	<!-- ②：拦截器的配置 -->
+	<mvc:interceptors>
+		<mvc:interceptor>
+			<mvc:mapping path="/**" />
+			<bean class="com.cloud.sns.web.intercepters.XSSIntercepter"></bean>
+		</mvc:interceptor>
+		<mvc:interceptor>
+			<!--<mvc:mapping path="/group/create*" />
+			<mvc:mapping path="/group/me*" />
+			<mvc:mapping path="/group/*/join*" />
+			<mvc:mapping path="/group/join*" />
+			<mvc:mapping path="/group/*/exit*" />
+			<mvc:mapping path="/group/*/invite*" />
+			<mvc:mapping path="/group/recommend*" />-->
+			<mvc:mapping path="/topic/create*" />
+			<mvc:mapping path="/topic/me/*" />
+			<mvc:mapping path="/topic/remove/*" />
+			<mvc:mapping path="/topic/invited/*" />
+			<mvc:mapping path="/topic/invite/*/*" />
+			<mvc:mapping path="/topic/invite/*/*" />
+			<mvc:mapping path="/certify/*" />
+			<mvc:mapping path="/hobby/*" />
+			<mvc:mapping path="/activity/mine*" />
+			<mvc:mapping path="/attention/*/*" />
+			<mvc:mapping path="/relation/*" />
+			<mvc:mapping path="/home/*" />
+			<mvc:mapping path="/topic/*/edit*" />
+			<mvc:mapping path="/topic/edit*" />
+			<!--<mvc:mapping path="/vtopic/edit*" />
+			<mvc:mapping path="/vtopic/create*" />
+			<mvc:mapping path="/vtopic/invite*" />
+			<mvc:mapping path="/vtopic/delete/*" />			-->
+			<mvc:mapping path="/comment/*/*/add*" />
+			<mvc:mapping path="/comment/del*" />
+			<mvc:mapping path="/article/add*" />
+			<mvc:mapping path="/article/edit*" />
+			<mvc:mapping path="/article/delete*" />
+			<mvc:mapping path="/article/sticky*" />
+			<mvc:mapping path="/article/save*" />
+			<!--<mvc:mapping path="/blog/list*" />
+			<mvc:mapping path="/blog/add*" />
+			<mvc:mapping path="/blog/*/edit*" />	
+			<mvc:mapping path="/blog/me*" />
+			<mvc:mapping path="/blog/*/toReprinted*" />
+			<mvc:mapping path="/questions/to_add/a*" />
+			<mvc:mapping path="/questions/to_edit/*" />
+			<mvc:mapping path="/questions/focus*" />-->
+			<mvc:mapping path="/user/binding*" />
+			<mvc:mapping path="/user/addinterest/*" />
+			<mvc:mapping path="/user/interestuser/*" />
+			<mvc:mapping path="/user/userInfo/*" />
+			<mvc:mapping path="/user/userInfo/*" />
+			<mvc:mapping path="/user/dynamic/*" />
+			<mvc:mapping path="/user/safe/*" />
+			<mvc:mapping path="/user/headphoto/*" />
+			<mvc:mapping path="/user/listPointRecords" />
+			
+			<mvc:mapping path="/dynamic/fans*" />
+			<mvc:mapping path="/dynamic/friend*" />
+			<mvc:mapping path="/dynamic/care*" />
+			<mvc:mapping path="/dynamic/daren*" />
+			<mvc:mapping path="/dynamic/expert*" />
+			
+			<mvc:mapping path="/message/remindList" />
+			<mvc:mapping path="/message/noRead" />
+			<mvc:mapping path="/message/personalMessageList" />
+			<mvc:mapping path="/message/userPersonalMsgList" />
+			
+			<mvc:mapping path="/task/growTask" />
+			<mvc:mapping path="/task/daysTask" />
+			<mvc:mapping path="/task/activeTask" />
+			<mvc:mapping path="/task/medalList" />
+			<mvc:mapping path="/pointRecords/list" />
+			<mvc:mapping path="/pointRecords/experience" />
+			<mvc:mapping path="/tagsComm/download/*" />
+			<mvc:mapping path="/tags/orderTags"/>
+			<mvc:mapping path="/doc/upload"/>
+			<mvc:mapping path="/doc/save*"/>
+			<bean class="com.cloud.sns.web.intercepters.SessionIntercepter">
+				<property name="allowUrls">
+					<list>
+					</list>
+				</property>
+			</bean>
+		</mvc:interceptor>
+	</mvc:interceptors>
+	<bean id="velocifyConfig" class="org.springframework.web.servlet.view.velocity.VelocityConfigurer">
+		<property name="resourceLoaderPath" value="/WEB-INF/front/" />
+		<property name="configLocation" value="classpath:/velocity.properties" />
+	</bean>
+	<bean name="groupTemplate" class="org.fox.beetl.ext.spring.core.GroupTemplateFactoryBean">
+		<property name="configFileResource" value="classpath:/beetl.properties"/>
+		<property name="resourceLoader">
+			<bean class="org.fox.beetl.ext.spring.resource.SpringServletContextResourceLoader"/>
+		</property>
+	</bean>
+	<bean id="viewResolver" class="com.cloud.sns.framework.core.view.MultiViewResover">
+		<property name="resolvers">
+			<map>
+				<entry key="jsp">
+					<bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+						<property name="viewClass" value="org.springframework.web.servlet.view.JstlView" />
+						<property name="contentType" value="text/html;charset=UTF-8" />
+						<property name="prefix" value="/WEB-INF/view/" />
+						<property name="suffix" value=".jsp" />
+					</bean>
+				</entry>
+				<entry key="vm">
+					<bean class="org.springframework.web.servlet.view.velocity.VelocityViewResolver">
+						<property name="cache" value="false" />
+						<property name="prefix" value="/WEB-INF/view/" />
+						<property name="suffix" value=".vm" />
+						<property name="contentType" value="text/html;charset=UTF-8" />
+						<property name="toolboxConfigLocation" value="/WEB-INF/vm/toolbox.xml" />
+					</bean>
+				</entry>
+				<entry key="httl">
+					<bean class="httl.web.springmvc.HttlViewResolver">
+						<property name="contentType" value="text/html; charset=UTF-8" />
+					</bean>
+				</entry>
+				<entry key="htm">
+					<bean name="beetlViewResolver" class="org.fox.beetl.ext.spring.mvc.BeetlViewResolver">
+						<property name="groupTemplate" ref="groupTemplate"/>
+						<property name="prefix" value="/WEB-INF/view/"/>
+						<property name="suffix" value=".htm"/>
+					</bean>
+				</entry>
+				<entry key="html">
+					<bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+						<property name="contentType" value="text/html;charset=UTF-8" />
+						<property name="prefix" value="/" />
+						<property name="suffix" value=".html" />
+					</bean>
+				</entry>
+			</map>
+		</property>
+	</bean>
+	<!-- REST中根据URL后缀自动判定Content-Type及相应的View -->
+	<bean id="contentNegotiationManager" class="org.springframework.web.accept.ContentNegotiationManagerFactoryBean">
+		<property name="favorPathExtension" value="false" />
+		<property name="favorParameter" value="false" />
+		<property name="ignoreAcceptHeader" value="false" />
+		<property name="mediaTypes" >
+			<value>
+				atom=application/atom+xml
+				xml=application/xml
+				html=text/html
+				json=application/json
+				*=*/*
+			</value>
+		</property>
+	</bean>
+
+
+	<bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
+		<!-- set the max upload size 10MB -->
+		<property name="defaultEncoding">
+			<value>UTF-8</value>
+		</property>
+		<property name="maxUploadSize">
+			<value>10485760</value>
+		</property>
+		<property name="maxInMemorySize">
+			<value>4096</value>
+		</property>
+	</bean>
+
+	<bean id="springUtil" class="com.cloud.sns.common.util.SpringUtil" />
+	
+	<!-- 全局异常配置 start -->    
+	<bean id="exceptionResolver" class="org.springframework.web.servlet.handler.SimpleMappingExceptionResolver">    
+		<property name="exceptionMappings">    
+			<props>    
+				<prop key="java.lang.Exception">/error/500</prop>    
+				<prop key="java.lang.Throwable">/error/404</prop>    
+			</props>    
+		</property>    
+		<property name="statusCodes">    
+			<props>    
+				<prop key="/error/500">500</prop>    
+				<prop key="/error/404">404</prop>    
+			</props>    
+		</property>    
+		<!-- 设置日志输出级别，不定义则默认不输出警告等错误日志信息 -->    
+		<property name="warnLogCategory" value="WARN"></property>    
+		<!-- 默认错误页面，当找不到上面mappings中指定的异常对应视图时，使用本默认配置 -->    
+		<property name="defaultErrorView" value="/error/404"></property>    
+		<!-- 默认HTTP状态码 -->    
+		<property name="defaultStatusCode" value="500"></property>    
+	</bean>    
+	<!-- 全局异常配置 end --> 
+    
+</beans>

@@ -1,0 +1,39 @@
+ext{
+	springVersion = '4.1.5.RELEASE'
+	luceneVersion ='4.9.0'
+	mybatisVersion ='3.2.8'
+	mybatisSpring='1.2.1'
+	aspectjVersion ='1.7.3'
+	guavaVersion='18.0'
+	httlVersion='1.0.11'
+}
+subprojects {
+	apply plugin: 'java'
+	apply plugin: 'eclipse'
+	
+	sourceCompatibility = 1.7
+	[
+		compileJava,
+		javadoc,
+		compileTestJava
+	]*.options*.encoding = 'UTF-8'
+
+	sourceSets {
+		main {
+			java { srcDir 'src/main/java' }
+			resources { srcDir 'src/main/resources' }
+		}
+	}
+	
+	repositories { mavenCentral() }
+	dependencies { testCompile 'junit:junit:4.8.2' }
+
+	version = '1.0'
+
+	jar { manifest.attributes provider: 'the shop arround you' }
+	
+	task createJavaProject << {
+		sourceSets*.java.srcDirs*.each { it.mkdirs() }
+		sourceSets*.resources.srcDirs*.each { it.mkdirs()}
+	}
+}

@@ -1,0 +1,2 @@
+
+include "eshop-service", "eshop-manage","eshop-common","eshop-model","eshop-passport","eshop-cache","eshop-web","eshop-frameworks"

@@ -1,0 +1,28 @@
+dependencies {
+	compile (
+			project(':eshop-cache'),
+			project(':eshop-common'),
+			'com.google.code.gson:gson:2.2.4',
+			'org.springframework.data:spring-data-mongodb:1.6.2.RELEASE',
+			"org.springframework:spring-core:$springVersion",
+			"org.springframework:spring-jdbc:$springVersion",
+			"org.springframework:spring-web:$springVersion",
+			"org.springframework:spring-webmvc:$springVersion",
+			"org.apache.lucene:lucene-queryparser:$luceneVersion",
+			"org.apache.lucene:lucene-highlighter:$luceneVersion",
+			"org.apache.lucene:lucene-core:$luceneVersion",
+			"org.aspectj:aspectjrt:$aspectjVersion",
+			"com.google.guava:guava:$guavaVersion",
+			"com.github.httl:httl-springmvc:$httlVersion",
+			"org.mybatis:mybatis:$mybatisVersion",
+			"org.mybatis:mybatis-spring:$mybatisSpring",
+			fileTree(dir: "${rootProject.projectDir}/lib", include: '*.jar')
+			)
+	runtime(
+			"org.aspectj:aspectjweaver:$aspectjVersion",
+			'org.projectlombok:lombok:1.12.4' 
+			)
+}
+
+
+
